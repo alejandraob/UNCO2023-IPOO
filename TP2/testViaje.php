@@ -1,5 +1,8 @@
 <?php
 require_once "Viaje.php";
+require_once "Pasajero.php";
+require_once "ResponsableV.php";
+
 /**************************************/
 /***** DEFINICION DE FUNCIONES ********/
 /**************************************/
@@ -34,24 +37,23 @@ function ingresarPasajero($viaje)
     $nombre = trim(fgets(STDIN));
     echo "Apellido del pasajero: \n";
     $apellido = trim(fgets(STDIN));
-    echo "Numero de DNI: \n";
+    echo "Nro de DNI: \n";
     $nroDoc = trim(fgets(STDIN));
+    echo "Nro de Tel: \n";
+    $nroTel = trim(fgets(STDIN));
 
-    $pasajero = [
-        "nombre" => $nombre,
-        "apellido" => $apellido,
-        "nroDoc" => $nroDoc
-    ];
+    $pasajero= New Pasajero($nombre, $apellido,$nroDoc,$nroTel);
 
-   echo $viaje->registrarPasajeros($pasajero);
+
+   echo $viaje->setpasajero($pasajero);
 }
 
 /**
  * 
  *  Usamos una funcion para modificar los datos del pasajero
- * @param Viaje $viaje
+ * @param string $mensaje
  * */
-function modificarPasajero($viaje)
+function modificarPasajero()
 {
     echo "Ingrese el DNI del pasajero que desea cambiar\n";
     echo "Numero del DNI pasajero: \n";
@@ -60,7 +62,8 @@ function modificarPasajero($viaje)
     $nombreNuevo = trim(fgets(STDIN));
     echo "Nuevo Apellido del pasajero: \n";
     $apellidoNuevo = trim(fgets(STDIN));
-
+    
+    $pasajero= New Pasajero();
     echo $viaje->modificarPasajero($nroDoc, $nombreNuevo, $apellidoNuevo);
 
     
