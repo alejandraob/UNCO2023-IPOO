@@ -108,18 +108,21 @@ class Viaje{
    }
 
    public function modificarPasajero($nombre, $apellido, $nroDni, $nroTel){
-    $pasajeroAModificar= new Pasajero($nombre, $apellido, $nroDni, $nroTel);
+    
     $i=0;
+    $corte=false;
+    $arrPasajeros= $this->getPasajeros();
     $longitud=count($this->getPasajeros());
 
-    while($i<$longitud){
-        if($pasajeroAModificar->getNroDni()==$this->getPasajeros()[$i]->getNroDni()){
+    while($i<$longitud && !$corte){
+        if($nroDni===$arrPasajeros[$i]->getNroDni()){
            
-            $pasajeroAModificar->setNombre($nombre);
-            $pasajeroAModificar->setApellido($apellido);
-            $pasajeroAModificar->setNroTel($nroTel);
-            
-            $this->setPasajeros($pasajeroAModificar);
+            $pasajeroEncontrado=$this->getPasajeros()[$i];
+            $pasajeroEncontrado->setNombre($nombre);
+            $pasajeroEncontrado->setApellido($apellido);
+            $pasajeroEncontrado->setNroDni($nroDni);
+            $pasajeroEncontrado->setNroTel($nroTel);
+            $corte=true;
         }
         $i++;
     
