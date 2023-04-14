@@ -17,24 +17,20 @@ class Viaje{
     private $codigo;
     private $destino;
     private $cantMaxPasajeros;
-    private Pasajero $pasajero;
-    private ResponsableV $responsable;
+    private $pasajeros=[];
+    private $responsable;
   
 
     //Constructor de la clase
-    public function __construct($codigo, $destino, $cantMaxPasajeros, $pasajero, $responsable)
+    public function __construct($codigo, $destino, $cantMaxPasajeros)
     {
         $this->codigo=$codigo;
         $this->destino=$destino;
         $this->cantMaxPasajeros=$cantMaxPasajeros; 
-        $this->pasajero=$pasajero;
-        $this->responsable=$responsable;
+        $this->pasajeros=[];
+      //  $this->responsable=$responsable;
     }
-
     //Declaracion de los Metodos
-
-   
-
 
     //Metodos Getter y Setter
     public function getCodigo(){
@@ -55,11 +51,11 @@ class Viaje{
     public function setCanMaxPasajeros($cantMaxPasajeros){
         $this->cantMaxPasajeros=$cantMaxPasajeros;
     }
-    public function getPasajero(){
-        return $this->pasajero;
+    public function getPasajeros(){
+        return $this->pasajeros;
     }
-    public function setPasajero($pasajero){
-        $this->pasajero=$pasajero;
+    public function setPasajeros($pasajero){
+        $this->pasajeros = $pasajero;
     }
     public function getResponsable(){
         return $this->responsable;
@@ -67,6 +63,86 @@ class Viaje{
     public function setResponsable($responsable){
         $this->responsable=$responsable;
     }
+///Metodo para pasajero
+    public function insertarPasajero($nombre, $apellido, $nroDni, $nroTel){
+        $pasajeroAIngresar= new Pasajero($nombre, $apellido, $nroDni, $nroTel);
+        //  echo "Esta es la llamada inicial \n";
+         //  var_dump($pasajeroAIngresar);
+       $i=0;
+        $longitud=count($this->getPasajeros());
+        //echo "Esta lo que tiene get pasajero ya guardado \n";
+        //var_dump($this->getPasajeros());
+     
+        while($i<$longitud){
+            if($pasajeroAIngresar->getNroDni()==$this->getPasajeros()[$i]->getNroDni()){
+               // echo "ME VOY EL DNI ES IGUAAAAL";
+                return false;
+            }
+            $i++;
+        
+        }
+
+        $pasajeroAIngresar->setNombre($nombre);
+        $pasajeroAIngresar->setApellido($apellido);
+        $pasajeroAIngresar->setNroDni($nroDni);
+        $pasajeroAIngresar->setNroTel($nroTel);
+
+        $arreglo=$this->getPasajeros();
+       // echo "esto todo lo que esta guardado \n";
+       // var_dump($arreglo);
+        array_push($arreglo,$pasajeroAIngresar);
+        $this->setPasajeros($arreglo);
+        return true;
+    } 
+
+
+   public function verPasajerosRegistrados(){
+    $i=0;
+    $mensaje="";
+    foreach($this->getPasajeros() as $pasajero){
+        $i++;
+       // $mensaje.= $i." - ".$pasajero->getNombre()." ".$pasajero->getApellido()." DNI: ".$pasajero->getNroDni()." TEL: ".$pasajero->getNroTel()."\n";
+       $mensaje.= $i." - ".$pasajero;
+    }
+    return $mensaje;
+   }
+
+   public function modificarPasajero($nombre, $apellido, $nroDni, $nroTel){
+    $pasajeroAModificar= new Pasajero($nombre, $apellido, $nroDni, $nroTel);
+    $i=0;
+    $longitud=count($this->getPasajeros());
+
+    while($i<$longitud){
+        if($pasajeroAModificar->getNroDni()==$this->getPasajeros()[$i]->getNroDni()){
+           
+            $pasajeroAModificar->setNombre($nombre);
+            $pasajeroAModificar->setApellido($apellido);
+            $pasajeroAModificar->setNroTel($nroTel);
+            
+            $this->setPasajeros($pasajeroAModificar);
+        }
+        $i++;
+    
+    }
+
+   // echo "esto todo lo que esta guardado \n";
+   // var_dump($arreglo);
+   // array_push($arreglo,$pasajeroAIngresar);
+    
+    return true;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function __toString(){
         //Mostramos la informacion que cargamos en nuestro sistema de viaje
