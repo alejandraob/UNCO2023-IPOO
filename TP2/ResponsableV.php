@@ -40,6 +40,11 @@ class ResponsableV{
     public function setApellido($apellido){
         $this->apellido=$apellido;
     }
+        //////////////////////////
+        public function __toString()
+        {
+            return $this->getNombre()." ".$this->getApellido()." Empleado Nro: ".$this->getNroEmpleado()." Licencia: ".$this->getNroLicencia();
+        }
 
 }
 ?>
