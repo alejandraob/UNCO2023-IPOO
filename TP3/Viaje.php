@@ -102,83 +102,77 @@ class Viaje
         $this->costoAbonado = $costoAbonado;
     }
 
+
+
     ///////////////Metodos para pasajero
+
+    public function comprobarPasajero($dni)
+    {
+        $respuesta = 0;
+        $pasajero = array_search($dni, array_column($this->pasajeros, 'nroDni'));
+        if ($pasajero || $pasajero === 0) {
+            $respuesta = $this->getPasajeros()[$pasajero];
+        }
+        return $respuesta;
+    }
     public function insertarPasajero($nombre, $apellido, $nroDni, $nroTel, $nroAsiento)
     {
-        $longitud = count($this->getPasajeros());
-        if ($longitud < $this->getCanMaxPasajeros()) {
-            $pasajeroAIngresar = new Pasajero($nombre, $apellido, $nroDni, $nroTel, $nroAsiento);
-            $i = 0;
-
-            while ($i < $longitud) {
-                if ($pasajeroAIngresar->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
-
-                    return false;
-                }
-                $i++;
+        if ($this->comprobarPasajero($nroDni) == 0) {
+            $longitud = count($this->getPasajeros());
+            if ($longitud < $this->getCanMaxPasajeros()) {
+                $pasajeroAIngresar = new Pasajero($nombre, $apellido, $nroDni, $nroTel, $nroAsiento);
+                $arreglo = $this->getPasajeros();
+                array_push($arreglo, $pasajeroAIngresar);
+                $this->setPasajeros($arreglo);
+            } else {
+                return 2;
             }
-            $arreglo = $this->getPasajeros();
-            array_push($arreglo, $pasajeroAIngresar);
-            $this->setPasajeros($arreglo);
-        } else {
-            return 2;
+            return true;
         }
-        return true;
     }
+
     public function insertarPasajeroVIP($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla)
     {
-        $longitud = count($this->getPasajeros());
-        if ($longitud < $this->getCanMaxPasajeros()) {
-            $pasajeroAIngresarVIP = new PasajeroVIP($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla);
-            $i = 0;
+        if ($this->comprobarPasajero($nroDni) == 0) {
+            $longitud = count($this->getPasajeros());
 
-            while ($i < $longitud) {
-                if ($pasajeroAIngresarVIP->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
+            if ($longitud < $this->getCanMaxPasajeros()) {
+                $pasajeroAIngresarVIP = new PasajeroVIP($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla);
 
-                    return false;
-                }
-                $i++;
+                $arreglo = $this->getPasajeros();
+                array_push($arreglo, $pasajeroAIngresarVIP);
+                $this->setPasajeros($arreglo);
+            } else {
+                return 2;
             }
-            $arreglo = $this->getPasajeros();
-            array_push($arreglo, $pasajeroAIngresarVIP);
-            $this->setPasajeros($arreglo);
-        } else {
-            return 2;
+            return true;
         }
-        return true;
     }
     public function insertarPasajeroEsp($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $silla, $asistencia, $comidaEspecial)
     {
-        $longitud = count($this->getPasajeros());
-  
+        if ($this->comprobarPasajero($nroDni) == 0) {
+            $longitud = count($this->getPasajeros());
 
-        $requiereSilla=($silla=="s")? true:false;
-        $requiereAsistencia=($asistencia=="s")? true:false;
-        $requiereComidaEspecial=($comidaEspecial=="s")? true:false;
 
-        if ($longitud < $this->getCanMaxPasajeros()) {
-            $pasajeroAIngresarESP = new PasajeroEsp($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial);
-            $i = 0;
-            while ($i < $longitud) {
-                if ($pasajeroAIngresarESP->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
+            $requiereSilla = ($silla == "s") ? true : false;
+            $requiereAsistencia = ($asistencia == "s") ? true : false;
+            $requiereComidaEspecial = ($comidaEspecial == "s") ? true : false;
 
-                    return false;
-                }
-                $i++;
+            if ($longitud < $this->getCanMaxPasajeros()) {
+                $pasajeroAIngresarESP = new PasajeroEsp($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial);
+                $arreglo = $this->getPasajeros();
+                array_push($arreglo, $pasajeroAIngresarESP);
+                $this->setPasajeros($arreglo);
+            } else {
+                return 2;
             }
-
-            $arreglo = $this->getPasajeros();
-            array_push($arreglo, $pasajeroAIngresarESP);
-            $this->setPasajeros($arreglo);
-        } else {
-            return 2;
+            return true;
         }
-        return true;
     }
 
     public function verPasajerosRegistrados()
     {
-        
+
         $i = 0;
         $mensaje = "";
         foreach ($this->getPasajeros() as $pasajero) {
@@ -306,22 +300,22 @@ class Viaje
     // Método para verificar si hay pasajes disponibles
     public function hayPasajesDisponibles()
     {
-        $listaPasajero=$this->getPasajeros();
+        $listaPasajero = $this->getPasajeros();
         return count($listaPasajero) < $this->getCanMaxPasajeros();
     }
-        // Método para calcular el costo final del viaje
-        public function calcularCostoPasajero($pasajero)
-        {
-            $costoPasaje=$this->getValorPasaje();
-            $porcentaje=($pasajero->darPorcentajeIncremento());
-            $calculoCosto=($costoPasaje*$porcentaje)/100;
-            return $calculoCosto;
-        }
+    // Método para calcular el costo final del viaje
+    public function calcularCostoPasajero($pasajero)
+    {
+        $costoPasaje = $this->getValorPasaje();
+        $porcentaje = $pasajero->darPorcentajeIncremento();
+        $calculoCosto = $costoPasaje+(($costoPasaje * $porcentaje) / 100);
+        return $calculoCosto;
+    }
     // Método para vender un pasaje
     public function venderPasaje($pasajero)
     {
-        $abonar=$this->calcularCostoPasajero($pasajero);
-        $costoAbonar=$this->setCostoAbonado($this->getValorPasaje()+$abonar);
+        $abonar = $this->calcularCostoPasajero($pasajero);
+        $costoAbonar = $this->setCostoAbonado($this->getCostoAbonado() + $abonar);
      return $costoAbonar;
     }
 
