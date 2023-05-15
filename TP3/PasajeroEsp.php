@@ -37,7 +37,32 @@ class PasajeroEsp extends Pasajero{
     }
     ///////////////////////fin metodos de acceso
 
+    /*
+        Implementar el método darPorcentajeIncremento() que retorne el porcentaje que debe aplicarse como incremento según las características del pasajero. 
+        Para un pasajero VIP se incrementa el importe un 35% y si la cantidad de millas acumuladas supera a las 300 millas se realiza un incremento del 30%. 
+        Si el pasajero tiene necesidades especiales y requiere silla de ruedas, asistencia y comida especial entonces el pasaje tiene un incremento del 30%; 
+        si solo requiere uno de los servicios prestados entonces el incremento es del 15%. 
+        Por último, para los pasajeros comunes el porcentaje de incremento es del 10 %.
+        
+        */
+        function darPorcentajeIncremento()
+        {
 
+            $sillaRuedas= $this->getRequiereSilla();
+            $asistenciaGrl=$this->getRequiereAsistencia();
+            $comidaEspecial=$this->getRequiereComidaEspecial();
+            $incremento=0;
+
+            if ($sillaRuedas && $asistenciaGrl &&  $comidaEspecial) {
+                $incremento= 30; // Incremento del 30% si requiere todos los servicios especiales
+            } elseif ($sillaRuedas || $asistenciaGrl || $comidaEspecial) {
+                $incremento= 15; // Incremento del 15% si requiere al menos uno de los servicios especiales
+            } else {
+                $incremento= 10; // Incremento del 10% por defecto para pasajeros con necesidades especiales
+            }
+        
+            return $incremento;
+        }
 
    
 

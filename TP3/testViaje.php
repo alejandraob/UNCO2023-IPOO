@@ -178,10 +178,16 @@ function eliminarResponsable($viaje)
 //Cargamos el array con dato
 
 
-$viaje = new Viaje("1", "Buenos Aires", 15);
+$viaje = new Viaje("1", "Buenos Aires", 15,3500);
 $viaje->insertarPasajero("Pedro", "Guzman", 36459126, 299269357);
 $pasajeroVIP= new PasajeroVIP("Emauel","Vazquez",36621147, 44718236, 1250, 03, 360, 15000);
 $pasajeroEspecial= new PasajeroEsp("Samuel","Lorenzo", 40123654, 44901889, 1200, 14, false, true, false);
+
+$costoFinalPasajero1 = $viaje->venderPasaje($pasajero1);
+$costoFinalPasajero2 = $viaje->venderPasaje($pasajero2);
+$costoFinalPasajero3 = $viaje->venderPasaje($pasajero3);
+
+
 $viaje->insertarResponable("I1", "3695", "Samanta", "Gutierrez");
 do {
 

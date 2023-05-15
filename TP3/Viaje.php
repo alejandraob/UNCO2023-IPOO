@@ -23,6 +23,7 @@ class Viaje
     private $pasajeros = [];
     private $responsable = [];
     private $valorPasaje;
+    private $costoAbonado;
 
 
     //Constructor de la clase
@@ -33,7 +34,8 @@ class Viaje
         $this->cantMaxPasajeros = $cantMaxPasajeros;
         $this->responsable = [];
         $this->pasajeros = [];
-        $this->valorPasaje;
+        $this->valorPasaje=$valorPasaje;
+        $this->costoAbonado=0;
         //  $this->responsable=$responsable;
     }
     //Declaracion de los Metodos
@@ -83,10 +85,18 @@ class Viaje
     public function getValorPasaje(){
         return $this->valorPasaje;
     }
+    
     public function setValorPasaje($valorPasaje){
-        $this->valorPasaje=$valorPasaje;
+        $this->valorPasaje = $valorPasaje;
     }
-
+    
+    public function getCostoAbonado(){
+        return $this->costoAbonado;
+    }
+    
+    public function setCostoAbonado($costoAbonado){
+        $this->costoAbonado = $costoAbonado;
+    }
 
     ///////////////Metodos para pasajero
     public function insertarPasajero($nombre, $apellido, $nroDni, $nroTel)
@@ -244,11 +254,49 @@ class Viaje
     }
 
 /////
-public function venderPasaje($pasajero){
 
-    $selecPasajero=$this->getPasajeros();
+public function hayPasajesDisponible() {
+    $cantidadMAXPasajeros=$this->getCanMaxPasajeros();
+    $totalPasajeros=count($this->pasajeros);
+    return $totalPasajeros<$cantidadMAXPasajeros;
+}
+/*
+public function venderPasaje($objPasajero) {
+    if ($this->hayPasajesDisponible()) {
+        $this->pasajeros[] = $objPasajero;
+        $costoViaje = $this->getValorPasaje();
+        $valorAbonado = $this->getCostoAbonado();
 
-    
+        $valorAbonado += $this->calcularCostoFinal($objPasajero);
+        $this->setCostoAbonado($valorAbonado); // Actualizar el costo abonado
+        return $costoViaje - $valorAbonado; // Retornar el costo final que debe ser abonado por el pasajero
+    } else {
+        return 0; // No hay espacio disponible para vender pasajes
+    }
+}
+*/
+private function calcularCostoFinal($objPasajero) {
+    $costoViaje = $this->getValorPasaje(); // Obtener el valor del pasaje
+    $porcentajeIncremento = $objPasajero->darPorcentajeIncremento() / 100;
+
+    return $costoViaje * (1 + $porcentajeIncremento); // Calcular el costo final con el porcentaje de incremento
+}
+
+public function venderPasaje($objPasajero)
+{
+    if ($this->hayPasajesDisponible()) {
+        $this->pasajeros[] = $objPasajero;
+        $costoViaje = $this->getValorPasaje();
+        $valorAbonado = $this->getCostoAbonado();
+
+        $costoFinal = $this->calcularCostoFinal($objPasajero);
+        $valorAbonado += $costoFinal;
+        $this->setCostoAbonado($valorAbonado); // Actualizar el costo abonado
+
+        return $costoFinal; // Retornar el costo final que debe ser abonado por el pasajero
+    } else {
+        return 0; // No hay espacio disponible para vender pasajes
+    }
 }
 
 

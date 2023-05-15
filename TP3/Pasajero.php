@@ -81,9 +81,9 @@ class Pasajero
         Por último, para los pasajeros comunes el porcentaje de incremento es del 10 %.
         
         */
-    public function darPorcentajeIncremento($valor)
+    public function darPorcentajeIncremento()
     {
-        $ticket=$this->getNroTicket();
+        return 10;
     }
 
 
