@@ -21,7 +21,8 @@ function mostrarMenu()
     8)Modificar datos de Empleado \n
     9)Eliminar Empleado \n
     10)Ver Información de Viaje Cargado \n
-    11)Salir\n
+    11)Vender Pasaje \n
+    12)Salir\n
     Ingrese la opción: ";
 }
 
@@ -44,8 +45,12 @@ function ingresarPasajero($viaje)
     $nroDoc = trim(fgets(STDIN));
     echo "Nro de Tel: \n";
     $nroTel = trim(fgets(STDIN));
+    echo "Nro tikcet: \n";
+    $nroTicket = trim(fgets(STDIN));
+    echo "Nro Asiento: \n";
+    $nroAsiento = trim(fgets(STDIN));
 
-    $resultado = $viaje->insertarPasajero($nombre, $apellido, $nroDoc, $nroTel);
+    $resultado = $viaje->insertarPasajero($nombre, $apellido, $nroDoc, $nroTel, $nroTicket, $nroAsiento);
     if ($resultado === 2) {
         echo "El pasajero no se pudo ingresar.Tiene completo el cupo de pasajeros permitidos.\n";
     }
@@ -168,7 +173,61 @@ function eliminarResponsable($viaje)
         echo "El Empleado se no se pudo eliminar. O no existe.\n";
     }
 }
+#-----------------------------
+/**
+ * @param Viaje $viaje
+ * 
+ */
+function ventaPasaje($viaje){
+    $VIP=false;
+    $especial=false;
+    $normal=true;
+    $esNormal=0;
+    
+    echo "El Pasajero es cliente VIP? s/n \n";
+    $respuestaVIP=trim(fgets(STDIN));
+    echo "El Pasajero presenta certificado de Discapasidad? s/n \n";
+    $respuestaDIS=trim(fgets(STDIN));
 
+    $respuestaVIP("s")? $VIP=true : $VIP=false;
+    $respuestaDIS("s")? $especial=true : $especial=false;
+
+    $esNormal($respuestaVIP==true || $respuestaDIS==true)? $normal=false : $normal=true;
+
+    if($VIP==true && $especial==false && $normal==false){
+        echo "Ingrese al pasajero para el viaje \n";
+        echo "Nombre del pasajero: \n";
+        $nombre = trim(fgets(STDIN));
+        echo "Apellido del pasajero: \n";
+        $apellido = trim(fgets(STDIN));
+        echo "Nro de DNI: \n";
+        $nroDoc = trim(fgets(STDIN));
+        echo "Nro de Tel: \n";
+        $nroTel = trim(fgets(STDIN));
+        echo "Nro tikcet: \n";
+        $nroTicket = trim(fgets(STDIN));
+        echo "Nro Asiento: \n";
+        $nroAsiento = trim(fgets(STDIN));
+        echo "Nro Viajero Frecuente: \n";
+        $nroViajeroFre = trim(fgets(STDIN));
+        echo "Cantidad Milla: \n";
+        $milla = trim(fgets(STDIN));
+    
+        $resultado = $viaje->insertarPasajero($nombre, $apellido, $nroDoc, $nroTel, $nroTicket, $nroAsiento, $nroViajeroFre, $milla);
+        if ($resultado === 2) {
+            echo "El pasajero no se pudo ingresar.Tiene completo el cupo de pasajeros permitidos.\n";
+        }
+        if ($resultado === true) {
+            echo "El pasajero se ha ingresado correctamente.\n";
+        } else {
+            echo "El pasajero no se pudo ingresar. Ya existe un pasajero con el mismo número de DNI.\n";
+        }
+
+    }
+
+
+
+}
 
 /**************************************/
 /***** PROGRAMA PRINCIPAL ********/
@@ -179,14 +238,13 @@ function eliminarResponsable($viaje)
 
 
 $viaje = new Viaje("1", "Buenos Aires", 15,3500);
-$viaje->insertarPasajero("Pedro", "Guzman", 36459126, 299269357);
-$pasajeroVIP= new PasajeroVIP("Emauel","Vazquez",36621147, 44718236, 1250, 03, 360, 15000);
-$pasajeroEspecial= new PasajeroEsp("Samuel","Lorenzo", 40123654, 44901889, 1200, 14, false, true, false);
+$pasajero=$viaje->insertarPasajero("Pedro", "Guzman", 36459126, 299269357,44, 15);
+$pasajeroVIP= new PasajeroVIP("Emanuel","Vazquez",36621147, 44718236, 45, 03, 360, 15000);
+$pasajeroEspecial= new PasajeroEsp("Samuel","Lorenzo", 40123654, 44901889, 46, 10, false, true, false);
 
-$costoFinalPasajero1 = $viaje->venderPasaje($pasajero1);
-$costoFinalPasajero2 = $viaje->venderPasaje($pasajero2);
-$costoFinalPasajero3 = $viaje->venderPasaje($pasajero3);
-
+$costoFinalPasajero1 = $viaje->venderPasaje($pasajero);
+$costoFinalPasajero1 = $viaje->venderPasaje($pasajeroVIP);
+$costoFinalPasajero2 = $viaje->venderPasaje($pasajeroEspecial);
 
 $viaje->insertarResponable("I1", "3695", "Samanta", "Gutierrez");
 do {
@@ -247,8 +305,16 @@ do {
             //Ver Información de Viaje Cargado
             echo $viaje;
             break;
+       case 11:
+                // Vender pasaje
+                //1ro verificar
+                if($viaje->hayPasajesDisponible()){
+                    ventaPasaje($viaje);
+                }
 
-        case 11:
+
+                break;
+        case 12:
             //Salir
             echo "Finalizo la carga del viaje";
             exit();

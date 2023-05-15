@@ -87,9 +87,25 @@ class Pasajero
     }
 
 
+    public function pasajeroRegistro(){
+
+        $nombre=$this->getNombre();
+        $apellido=$this->getApellido();
+        $dni=$this->getNroDni();
+        $tel=$this->getNroTel();
+        $ticket=$this->getNroTicket();
+        $asiento=$this->getNroAsiento();
+        $pasajero=$nombre . " " . $apellido . " | DNI: " . $dni . " | Tel: " . $tel . " | NRO Ticked: ".$ticket." | Asiento: ".$asiento."\n ";
+
+        return $pasajero;
+    }
+
+
+
     ///////////////////
     public function __toString()
     {
-        return $this->getNombre() . " " . $this->getApellido() . " DNI: " . $this->getNroDni() . " Tel: " . $this->getNroTel() . "\n ";
+        $pasajero=$this->pasajeroRegistro();
+        return $pasajero;
     }
 }

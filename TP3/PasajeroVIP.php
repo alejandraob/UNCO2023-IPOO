@@ -49,7 +49,27 @@ class PasajeroVIP extends Pasajero{
             }
             return $incremento;
         }
+      function pasajeroRegistro(){
+            $nombre=$this->getNombre();
+            $apellido=$this->getApellido();
+            $dni=$this->getNroDni();
+            $tel=$this->getNroTel();
+            $ticket=$this->getNroTicket();
+            $nroViajeroFre=$this->getNroViajeroFrecuente();
+            $cantidadMilla=$this->getCanMaxPasajeros();
 
+      
+            $pasajero=$nombre . " " . $apellido . " | DNI: " . $dni . " | Tel: " . $tel . " | NRO Ticked: ".$ticket." | Asiento: ".$asiento." | Requiere silla?: ".($silla(true)? 'SI':'NO')." | Requiere Asitencia?: ".($asistente(true)? 'SI':'NO')." | Comida Especial?: ".($comidaEsp(true)? 'SI':'NO')."\n";
+    
+            return $pasajero;
+        }
+
+    ///////////////////
+    function __toString()
+    {
+        $pasajero=$this->pasajeroRegistro();
+        return $pasajero;
+    }
 
 
 ?>
