@@ -35,6 +35,35 @@ function mostrarMenu()
 function ingresarPasajero($viaje)
 {
 
+    echo "Ingrese al pasajero para el viaje \n";
+    echo "Nombre del pasajero: \n";
+    $nombre = trim(fgets(STDIN));
+    echo "Apellido del pasajero: \n";
+    $apellido = trim(fgets(STDIN));
+    echo "Nro de DNI: \n";
+    $nroDoc = trim(fgets(STDIN));
+    echo "Nro de Tel: \n";
+    $nroTel = trim(fgets(STDIN));
+    echo "Nro Asiento: \n";
+    $nroAsiento = trim(fgets(STDIN));
+
+    $resultado = $viaje->insertarPasajero($nombre, $apellido, $nroDoc, $nroTel, $nroAsiento);
+    if ($resultado === 2) {
+        echo "El pasajero no se pudo ingresar.Tiene completo el cupo de pasajeros permitidos.\n";
+    }
+    if ($resultado === true) {
+        echo "El pasajero se ha ingresado correctamente.\n";
+    } else {
+        echo "El pasajero no se pudo ingresar. Ya existe un pasajero con el mismo número de DNI.\n";
+    }
+}
+/**
+ * 
+ *  Usamos una funcion para cargar los datos del pasajero
+ * @param Viaje $viaje
+ * */
+function ingresarPasajeroVIP($viaje)
+{
 
     echo "Ingrese al pasajero para el viaje \n";
     echo "Nombre del pasajero: \n";
@@ -45,12 +74,14 @@ function ingresarPasajero($viaje)
     $nroDoc = trim(fgets(STDIN));
     echo "Nro de Tel: \n";
     $nroTel = trim(fgets(STDIN));
-    echo "Nro tikcet: \n";
-    $nroTicket = trim(fgets(STDIN));
     echo "Nro Asiento: \n";
     $nroAsiento = trim(fgets(STDIN));
+    echo "Nro Viajero Frecuente: \n";
+    $idViajeroFrecuente = trim(fgets(STDIN));
+    echo "Millas Acumuladas: \n";
+    $millas = trim(fgets(STDIN));
 
-    $resultado = $viaje->insertarPasajero($nombre, $apellido, $nroDoc, $nroTel, $nroTicket, $nroAsiento);
+    $resultado = $viaje->insertarPasajeroVIP($nombre, $apellido, $nroDoc, $nroTel, $nroAsiento, $idViajeroFrecuente, $millas);
     if ($resultado === 2) {
         echo "El pasajero no se pudo ingresar.Tiene completo el cupo de pasajeros permitidos.\n";
     }
@@ -60,7 +91,42 @@ function ingresarPasajero($viaje)
         echo "El pasajero no se pudo ingresar. Ya existe un pasajero con el mismo número de DNI.\n";
     }
 }
+/**
+ * 
+ *  Usamos una funcion para cargar los datos del pasajero
+ * @param Viaje $viaje
+ * */
+function ingresarPasajeroEsp($viaje)
+{
 
+    echo "Ingrese al pasajero para el viaje \n";
+    echo "Nombre del pasajero: \n";
+    $nombre = trim(fgets(STDIN));
+    echo "Apellido del pasajero: \n";
+    $apellido = trim(fgets(STDIN));
+    echo "Nro de DNI: \n";
+    $nroDoc = trim(fgets(STDIN));
+    echo "Nro de Tel: \n";
+    $nroTel = trim(fgets(STDIN));
+    echo "Nro Asiento: \n";
+    $nroAsiento = trim(fgets(STDIN));
+    echo "Requiere silla de ruedas?: S/N \n";
+    $silla = trim(fgets(STDIN));
+    echo "Requiere Asistencia para embarque y desembarque?: S/N \n";
+    $asistente = trim(fgets(STDIN));
+    echo "Plan de comida especial?: S/N \n";
+    $comidaEsp = trim(fgets(STDIN));
+
+    $resultado = $viaje->insertarPasajeroEsp($nombre, $apellido, $nroDoc, $nroTel, $nroAsiento, $silla, $asistente, $comidaEsp);
+    if ($resultado === 2) {
+        echo "El pasajero no se pudo ingresar.Tiene completo el cupo de pasajeros permitidos.\n";
+    }
+    if ($resultado === true) {
+        echo "El pasajero se ha ingresado correctamente.\n";
+    } else {
+        echo "El pasajero no se pudo ingresar. Ya existe un pasajero con el mismo número de DNI.\n";
+    }
+}
 /**
  * 
  *  Usamos una funcion para modificar los datos del pasajero
@@ -179,54 +245,48 @@ function eliminarResponsable($viaje)
  * 
  */
 function ventaPasaje($viaje){
-    $VIP=false;
-    $especial=false;
-    $normal=true;
-    $esNormal=0;
-    
-    echo "El Pasajero es cliente VIP? s/n \n";
-    $respuestaVIP=trim(fgets(STDIN));
-    echo "El Pasajero presenta certificado de Discapasidad? s/n \n";
-    $respuestaDIS=trim(fgets(STDIN));
+    echo "Procedimiento de Venta \n";
+    if($viaje->hayPasajesDisponible()){
+    echo "Seleccione la opción \n
+     1) Venta Normal \n
+     2) Venta VIP \n
+     3) Venta para personas con Discapacidad \n";
+     $respuesta=trim(fgets((STDIN)));
+     
+     switch($respuesta){
+        case 1:
+               // ingresarPasajero($viaje);
+               $respuesta= ventaPasaje(ingresarPasajero($viaje));
+               if($respuesta){
+                echo "Total de pasaje normal es: $" . $respuesta;
+               }else{
+                echo "Existe un problema en la venta normal";
+               }
 
-    $respuestaVIP("s")? $VIP=true : $VIP=false;
-    $respuestaDIS("s")? $especial=true : $especial=false;
-
-    $esNormal($respuestaVIP==true || $respuestaDIS==true)? $normal=false : $normal=true;
-
-    if($VIP==true && $especial==false && $normal==false){
-        echo "Ingrese al pasajero para el viaje \n";
-        echo "Nombre del pasajero: \n";
-        $nombre = trim(fgets(STDIN));
-        echo "Apellido del pasajero: \n";
-        $apellido = trim(fgets(STDIN));
-        echo "Nro de DNI: \n";
-        $nroDoc = trim(fgets(STDIN));
-        echo "Nro de Tel: \n";
-        $nroTel = trim(fgets(STDIN));
-        echo "Nro tikcet: \n";
-        $nroTicket = trim(fgets(STDIN));
-        echo "Nro Asiento: \n";
-        $nroAsiento = trim(fgets(STDIN));
-        echo "Nro Viajero Frecuente: \n";
-        $nroViajeroFre = trim(fgets(STDIN));
-        echo "Cantidad Milla: \n";
-        $milla = trim(fgets(STDIN));
-    
-        $resultado = $viaje->insertarPasajero($nombre, $apellido, $nroDoc, $nroTel, $nroTicket, $nroAsiento, $nroViajeroFre, $milla);
-        if ($resultado === 2) {
-            echo "El pasajero no se pudo ingresar.Tiene completo el cupo de pasajeros permitidos.\n";
-        }
-        if ($resultado === true) {
-            echo "El pasajero se ha ingresado correctamente.\n";
-        } else {
-            echo "El pasajero no se pudo ingresar. Ya existe un pasajero con el mismo número de DNI.\n";
-        }
-
+            break;
+        case 2:
+            //ingresarPasajeroVIP($viaje);
+            $respuesta=ventaPasaje(ingresarPasajeroVIP($viaje));
+            if($respuesta){
+                echo "Total de pasaje normal es: $" . $respuesta;
+               }else{
+                echo "Existe un problema en la venta VIP";
+               }
+            break;
+        case 3:
+            //ingresarPasajeroEsp($viaje);
+            $respuesta=ventaPasaje(ingresarPasajeroEsp($viaje));
+            if($respuesta){
+                echo "Total de pasaje normal es: $" . $respuesta;
+               }else{
+                echo "Existe un problema en la venta Especial";
+               }
+            break;
+     }
+    }else{
+        echo "No existe pasaje disponibles en este momento";
     }
-
-
-
+    
 }
 
 /**************************************/
@@ -238,9 +298,9 @@ function ventaPasaje($viaje){
 
 
 $viaje = new Viaje("1", "Buenos Aires", 15,3500);
-$pasajero=$viaje->insertarPasajero("Pedro", "Guzman", 36459126, 299269357,44, 15);
-$pasajeroVIP= new PasajeroVIP("Emanuel","Vazquez",36621147, 44718236, 45, 03, 360, 15000);
-$pasajeroEspecial= new PasajeroEsp("Samuel","Lorenzo", 40123654, 44901889, 46, 10, false, true, false);
+$pasajero=$viaje->insertarPasajero("Pedro", "Guzman", 36459126, 299269357, 15);
+$pasajeroVIP=$viaje->insertarPasajeroVIP("Emanuel","Vazquez",36621147, 44718236, 12, 360, 15000);
+$pasajeroEspecial=$viaje->insertarPasajeroEsp("Samuel","Lorenzo", 40123654, 44901889, 10, false, true, false);
 
 $costoFinalPasajero1 = $viaje->venderPasaje($pasajero);
 $costoFinalPasajero1 = $viaje->venderPasaje($pasajeroVIP);
@@ -311,8 +371,6 @@ do {
                 if($viaje->hayPasajesDisponible()){
                     ventaPasaje($viaje);
                 }
-
-
                 break;
         case 12:
             //Salir

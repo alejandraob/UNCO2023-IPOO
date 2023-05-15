@@ -7,8 +7,8 @@ class PasajeroEsp extends Pasajero{
     private $requiereComidaEspecial;
 
     //En el metodo constructor heredamos los atributos padre
-    public function __construct($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial){
-        parent::__construct($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento);
+    public function __construct($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial){
+        parent::__construct($nombre, $apellido, $nroDni, $nroTel, $nroAsiento);
         $this->requiereSilla=$requiereSilla;
         $this->requiereAsistencia=$requiereAsistencia;
         $this->requiereComidaEspecial=$requiereComidaEspecial;
@@ -57,34 +57,21 @@ class PasajeroEsp extends Pasajero{
                 $incremento= 30; // Incremento del 30% si requiere todos los servicios especiales
             } elseif ($sillaRuedas || $asistenciaGrl || $comidaEspecial) {
                 $incremento= 15; // Incremento del 15% si requiere al menos uno de los servicios especiales
-            } else {
-                $incremento= 10; // Incremento del 10% por defecto para pasajeros con necesidades especiales
             }
         
             return $incremento;
         }
 
-       function pasajeroRegistro(){
-            $nombre=$this->getNombre();
-            $apellido=$this->getApellido();
-            $dni=$this->getNroDni();
-            $tel=$this->getNroTel();
-            $ticket=$this->getNroTicket();
-            $asiento=$this->getNroAsiento();
-            $silla=$this->getRequiereSilla();
-            $asistente=$this->getRequiereAsistencia();
-            $comidaEsp=$this->getRequiereComidaEspecial();
-
-            $pasajero=$nombre . " " . $apellido . " | DNI: " . $dni . " | Tel: " . $tel . " | NRO Ticked: ".$ticket." | Asiento: ".$asiento." | Requiere silla?: ".($silla(true)? 'SI':'NO')." | Requiere Asitencia?: ".($asistente(true)? 'SI':'NO')." | Comida Especial?: ".($comidaEsp(true)? 'SI':'NO')."\n";
-    
-            return $pasajero;
-        }
-
     ///////////////////
     function __toString()
     {
-        $pasajero=$this->pasajeroRegistro();
-        return $pasajero;
+        $silla=$this->getRequiereSilla();
+        $asistente=$this->getRequiereAsistencia();
+        $comidaEsp=$this->getRequiereComidaEspecial();
+
+        $pasajero=" | Requiere silla?: ".($silla? 'SI':'NO')." | Requiere Asitencia?: ".($asistente? 'SI':'NO')." | Comida Especial?: ".($comidaEsp? 'SI':'NO')."\n";
+
+        return parent::__toString().$pasajero;
     }
 
 

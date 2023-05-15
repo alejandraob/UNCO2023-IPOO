@@ -3,23 +3,23 @@
 class Pasajero
 {
     ///////////////////////////     DENICION DE   ATRIBUTOS           ///////////////////
-    private $nombre;
-    private $apellido;
-    private $nroDni;
-    private $nroTel;
+    protected $nombre;
+    protected $apellido;
+    protected $nroDni;
+    protected $nroTel;
     ///Nuevos atributos correspondientes al TP3
     private $nroTicket;
-    private $nroAsiento;
+    protected $nroAsiento;
 
     //////////////////////////      DEFINICION DE METODOS            //////////////////////
     ///Metodo Constructor
-    public function __construct($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento)
+    public function __construct($nombre, $apellido, $nroDni, $nroTel,$nroAsiento)
     {
         $this->nombre = $nombre;
         $this->apellido = $apellido;
         $this->nroDni = $nroDni;
         $this->nroTel = $nroTel;
-        $this->nroTicket = $nroTicket;
+        $this->nroTicket=rand(1,20);
         $this->nroAsiento = $nroAsiento;
     }
     ///Metodos Getter
@@ -45,7 +45,7 @@ class Pasajero
     }
     public function getNroAsiento()
     {
-        return $this->nroTicket;
+        return $this->nroAsiento;
     }
     ///Metodos Setter
     public function setNombre($nombre)
@@ -68,9 +68,9 @@ class Pasajero
     {
         $this->nroTicket = $nroTicket;
     }
-    public function setNroAsiento($nroTicket)
+    public function setNroAsiento($nroAsiento)
     {
-        $this->nroTicket = $nroTicket;
+        $this->nroAsiento = $nroAsiento;
     }
     //////////////////////////
     /*
@@ -81,31 +81,24 @@ class Pasajero
         Por último, para los pasajeros comunes el porcentaje de incremento es del 10 %.
         
         */
+
+
     public function darPorcentajeIncremento()
     {
         return 10;
     }
 
-
-    public function pasajeroRegistro(){
-
+    ///////////////////
+    public function __toString()
+    {
         $nombre=$this->getNombre();
         $apellido=$this->getApellido();
         $dni=$this->getNroDni();
         $tel=$this->getNroTel();
         $ticket=$this->getNroTicket();
         $asiento=$this->getNroAsiento();
-        $pasajero=$nombre . " " . $apellido . " | DNI: " . $dni . " | Tel: " . $tel . " | NRO Ticked: ".$ticket." | Asiento: ".$asiento."\n ";
+        $pasajero=$nombre . " " . $apellido . " | DNI: " . $dni . " | Tel: " . $tel . " | NRO Ticked: VF12".$ticket." | Asiento: ".$asiento." \n";
 
-        return $pasajero;
-    }
-
-
-
-    ///////////////////
-    public function __toString()
-    {
-        $pasajero=$this->pasajeroRegistro();
         return $pasajero;
     }
 }

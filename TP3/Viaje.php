@@ -34,8 +34,8 @@ class Viaje
         $this->cantMaxPasajeros = $cantMaxPasajeros;
         $this->responsable = [];
         $this->pasajeros = [];
-        $this->valorPasaje=$valorPasaje;
-        $this->costoAbonado=0;
+        $this->valorPasaje = $valorPasaje;
+        $this->costoAbonado = 0;
         //  $this->responsable=$responsable;
     }
     //Declaracion de los Metodos
@@ -82,31 +82,34 @@ class Viaje
         $this->responsable = $responsable;
     }
 
-    public function getValorPasaje(){
+    public function getValorPasaje()
+    {
         return $this->valorPasaje;
     }
-    
-    public function setValorPasaje($valorPasaje){
+
+    public function setValorPasaje($valorPasaje)
+    {
         $this->valorPasaje = $valorPasaje;
     }
-    
-    public function getCostoAbonado(){
+
+    public function getCostoAbonado()
+    {
         return $this->costoAbonado;
     }
-    
-    public function setCostoAbonado($costoAbonado){
+
+    public function setCostoAbonado($costoAbonado)
+    {
         $this->costoAbonado = $costoAbonado;
     }
 
     ///////////////Metodos para pasajero
-    public function insertarPasajero($nombre, $apellido, $nroDni, $nroTel,$nroTicket, $nroAsiento,$nroViajeroFrecuente, $cantidadMilla, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial )
+    public function insertarPasajero($nombre, $apellido, $nroDni, $nroTel, $nroAsiento)
     {
-        if($nroViajeroFrecuente==null && $cantidadMilla==null && $requiereSilla==null && $requiereAsistencia==null && $requiereComidaEspecial==null){
-            $pasajeroAIngresar = new Pasajero($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento);
+        $longitud = count($this->getPasajeros());
+        if ($longitud < $this->getCanMaxPasajeros()) {
+            $pasajeroAIngresar = new Pasajero($nombre, $apellido, $nroDni, $nroTel, $nroAsiento);
             $i = 0;
-            $longitud = count($this->getPasajeros());
 
-            if($longitud<$this->getCanMaxPasajeros()){
             while ($i < $longitud) {
                 if ($pasajeroAIngresar->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
 
@@ -114,80 +117,68 @@ class Viaje
                 }
                 $i++;
             }
-            $pasajeroAIngresar->setNombre($nombre);
-            $pasajeroAIngresar->setApellido($apellido);
-            $pasajeroAIngresar->setNroDni($nroDni);
-            $pasajeroAIngresar->setNroTel($nroTel);
-            $pasajeroAIngresar->setNroTicket($nroTicket);
-            $pasajeroAIngresar->setNroAsiento($nroAsiento);
             $arreglo = $this->getPasajeros();
             array_push($arreglo, $pasajeroAIngresar);
             $this->setPasajeros($arreglo);
-            }else{
-                return 2;
-            }
-            return true;
+        } else {
+            return 2;
         }
-        if($requiereSilla==null && $requiereAsistencia==null && $requiereComidaEspecial==null){
-         $pasajeroAIngresarVIP = new PasajeroVIP($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento,$nroViajeroFrecuente, $cantidadMilla);
+        return true;
+    }
+    public function insertarPasajeroVIP($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla)
+    {
+        $longitud = count($this->getPasajeros());
+        if ($longitud < $this->getCanMaxPasajeros()) {
+            $pasajeroAIngresarVIP = new PasajeroVIP($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla);
             $i = 0;
-            $longitud = count($this->getPasajeros());
-    
-            if($longitud<$this->getCanMaxPasajeros()){
+
             while ($i < $longitud) {
                 if ($pasajeroAIngresarVIP->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
-    
+
                     return false;
                 }
                 $i++;
             }
-            $pasajeroAIngresarVIP->setNombre($nombre);
-            $pasajeroAIngresarVIP->setApellido($apellido);
-            $pasajeroAIngresarVIP->setNroDni($nroDni);
-            $pasajeroAIngresarVIP->setNroTel($nroTel);
-            $pasajeroAIngresarVIP->setNroTicket($nroTicket);
-            $pasajeroAIngresarVIP->setNroAsiento($nroAsiento);
             $arreglo = $this->getPasajeros();
             array_push($arreglo, $pasajeroAIngresarVIP);
             $this->setPasajeros($arreglo);
-            }else{
-                return 2;
-            }
-            return true;
-        
-        
+        } else {
+            return 2;
         }
-        if($cantidadMilla==null &&  $requiereSilla==null){
-         $pasajeroAIngresarESP = new PasajeroEsp($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial);
-        $i = 0;
+        return true;
+    }
+    public function insertarPasajeroEsp($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $silla, $asistencia, $comidaEspecial)
+    {
         $longitud = count($this->getPasajeros());
+  
 
-        if($longitud<$this->getCanMaxPasajeros()){
-        while ($i < $longitud) {
-            if ($pasajeroAIngresarESP->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
+        $requiereSilla=($silla=="s")? true:false;
+        $requiereAsistencia=($asistencia=="s")? true:false;
+        $requiereComidaEspecial=($comidaEspecial=="s")? true:false;
 
-                return false;
+        if ($longitud < $this->getCanMaxPasajeros()) {
+            $pasajeroAIngresarESP = new PasajeroEsp($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $requiereSilla, $requiereAsistencia, $requiereComidaEspecial);
+            $i = 0;
+            while ($i < $longitud) {
+                if ($pasajeroAIngresarESP->getNroDni() == $this->getPasajeros()[$i]->getNroDni()) {
+
+                    return false;
+                }
+                $i++;
             }
-            $i++;
-        }
-        $pasajeroAIngresarESP->setNombre($nombre);
-        $pasajeroAIngresarESP->setApellido($apellido);
-        $pasajeroAIngresarESP->setNroDni($nroDni);
-        $pasajeroAIngresarESP->setNroTel($nroTel);
-        $pasajeroAIngresarESP->setNroTicket($nroTicket);
-        $pasajeroAIngresarESP->setNroAsiento($nroAsiento);
-        $arreglo = $this->getPasajeros();
-        array_push($arreglo, $pasajeroAIngresarESP);
-        $this->setPasajeros($arreglo);
-        }else{
+
+            $arreglo = $this->getPasajeros();
+            array_push($arreglo, $pasajeroAIngresarESP);
+            $this->setPasajeros($arreglo);
+        } else {
             return 2;
         }
         return true;
     }
 
-    }
     public function verPasajerosRegistrados()
     {
+        
         $i = 0;
         $mensaje = "";
         foreach ($this->getPasajeros() as $pasajero) {
@@ -197,28 +188,28 @@ class Viaje
         return $mensaje;
     }
 
-    public function modificarPasajero($nroDni,$nombre, $apellido,  $nroTel)
+    public function modificarPasajero($nroDni, $nombre, $apellido,  $nroTel)
     {
 
-         $i = 0;
-         $corte = false;
+        $i = 0;
+        $corte = false;
         $array_Pasajeros = $this->getPasajeros();
         $longitud = count($this->getPasajeros());
 
         while ($i < $longitud && !$corte) {
             if ($nroDni === $array_Pasajeros[$i]->getNroDni()) {
 
-                $pasajeroEncontrado =$array_Pasajeros[$i];
+                $pasajeroEncontrado = $array_Pasajeros[$i];
                 $pasajeroEncontrado->setNombre($nombre);
                 $pasajeroEncontrado->setApellido($apellido);
                 $pasajeroEncontrado->setNroDni($nroDni);
                 $pasajeroEncontrado->setNroTel($nroTel);
-               // $this->setPasajeros($array_Pasajeros);
+                // $this->setPasajeros($array_Pasajeros);
                 $corte = true;
             }
             $i++;
         }
-        
+
         $this->setPasajeros($array_Pasajeros);
         return true;
     }
@@ -261,26 +252,26 @@ class Viaje
 
     public function verResponsableViaje()
     {
-        $i=0;
-        $mensaje ="";
+        $i = 0;
+        $mensaje = "";
         foreach ($this->getResponsable() as $responsable) {
             $i++;
-            $mensaje .=$responsable;
+            $mensaje .= $responsable;
         }
         return $mensaje;
     }
 
     public function modificarResponsable($nroEmpleado, $nroLicencia, $nombre, $apellido)
     {
-         $i = 0;
-         $corte = false;
+        $i = 0;
+        $corte = false;
         $array_Responsable = $this->getResponsable();
         $longitud = count($this->getResponsable());
 
         while ($i < $longitud && !$corte) {
             if ($nroEmpleado === $array_Responsable[$i]->getNroEmpleado()) {
 
-                $pasajeroEncontrado =$array_Responsable[$i];
+                $pasajeroEncontrado = $array_Responsable[$i];
                 $pasajeroEncontrado->setNombre($nombre);
                 $pasajeroEncontrado->setApellido($apellido);
                 $pasajeroEncontrado->setNroLicencia($nroLicencia);
@@ -288,7 +279,7 @@ class Viaje
             }
             $i++;
         }
-        
+
         $this->setResponsable($array_Responsable);
         return true;
     }
@@ -311,116 +302,59 @@ class Viaje
         return true;
     }
 
-/////
-/*
-public function hayPasajesDisponible() {
-    $cantidadMAXPasajeros=$this->getCanMaxPasajeros();
-    $totalPasajeros=count($this->pasajeros);
-    return $totalPasajeros<$cantidadMAXPasajeros;
-}
-/*
-public function venderPasaje($objPasajero) {
-    if ($this->hayPasajesDisponible()) {
-        $this->pasajeros[] = $objPasajero;
-        $costoViaje = $this->getValorPasaje();
-        $valorAbonado = $this->getCostoAbonado();
 
-        $valorAbonado += $this->calcularCostoFinal($objPasajero);
-        $this->setCostoAbonado($valorAbonado); // Actualizar el costo abonado
-        return $costoViaje - $valorAbonado; // Retornar el costo final que debe ser abonado por el pasajero
-    } else {
-        return 0; // No hay espacio disponible para vender pasajes
-    }
-}
-*//*
-private function calcularCostoFinal($objPasajero) {
-    $costoViaje = $this->getValorPasaje(); // Obtener el valor del pasaje
-    $porcentajeIncremento = $objPasajero->darPorcentajeIncremento() / 100;
-
-    return $costoViaje * (1 + $porcentajeIncremento); // Calcular el costo final con el porcentaje de incremento
-}
-
-public function venderPasaje($objPasajero)
-{
-    if ($this->hayPasajesDisponible()) {
-        $this->pasajeros[] = $objPasajero;
-        $costoViaje = $this->getValorPasaje();
-        $valorAbonado = $this->getCostoAbonado();
-
-        $costoFinal = $this->calcularCostoFinal($objPasajero);
-        $valorAbonado += $costoFinal;
-        $this->setCostoAbonado($valorAbonado); // Actualizar el costo abonado
-
-        return $costoFinal; // Retornar el costo final que debe ser abonado por el pasajero
-    } else {
-        return 0; // No hay espacio disponible para vender pasajes
-    }
-}
-*/
     // Método para verificar si hay pasajes disponibles
     public function hayPasajesDisponibles()
     {
-        return count($this->pasajeros) < $this->cantMaxPasajeros;
+        $listaPasajero=$this->getPasajeros();
+        return count($listaPasajero) < $this->getCanMaxPasajeros();
     }
-
-    // Método para vender un pasaje
-    public function venderPasaje($objPasajero)
-    {
-        if ($this->hayPasajesDisponibles()) {
-            $this->pasajeros[] = $objPasajero;
-            $this->costoAbonado += $this->valorPasaje;
-            return $this->valorPasaje;
-        } else {
-            return 0; // Si no hay pasajes disponibles, el costo será 0
+        // Método para calcular el costo final del viaje
+        public function calcularCostoPasajero($pasajero)
+        {
+            $costoPasaje=$this->getValorPasaje();
+            $porcentaje=($pasajero->darPorcentajeIncremento());
+            $calculoCosto=($costoPasaje*$porcentaje)/100;
+            return $calculoCosto;
         }
+    // Método para vender un pasaje
+    public function venderPasaje($pasajero)
+    {
+        $abonar=$this->calcularCostoPasajero($pasajero);
+        $costoAbonar=$this->setCostoAbonado($this->getValorPasaje()+$abonar);
+     return $costoAbonar;
     }
 
-    // Método para calcular el costo final del viaje
-    public function calcularCostoFinal()
-    {
-        $costoTotal = $this->valorPasaje * count($this->pasajeros);
-        return $costoTotal;
-    }
-
-    // Método para obtener la lista de pasajeros
-    public function obtenerPasajeros()
-    {
-        return $this->pasajeros;
-    }
-
-    // Método para obtener el costo abonado hasta el momento
-    public function obtenerCostoAbonado()
-    {
-        return $this->costoAbonado;
-    }
 
 
     ///////////////FIN Metodos para pasajero
 
     public function __toString()
     {
-        $codigo=$this->getCodigo();
-        $destino=$this->getDestino() ;
-        $responsable=$this->getCanMaxPasajeros();
-        $maxPasajeros=$this->getCanMaxPasajeros();
-        $costoPasaje=$this->getValorPasaje();
-        $abonado=$this->getCostoAbonado();
-        $totalPasajeros=count($this->pasajeros);
+        $codigo = $this->getCodigo();
+        $destino = $this->getDestino();
+        $responsable = $this->getCanMaxPasajeros();
+        $maxPasajeros = $this->getCanMaxPasajeros();
+        $costoPasaje = $this->getValorPasaje();
+        $abonado = $this->getCostoAbonado();
+        $totalPasajeros = count($this->getPasajeros());
+
+        print_r($this->getPasajeros());
 
         //Mostramos la informacion que cargamos en nuestro sistema de viaje
         $mensaje = "********** Información Viaje Feliz **********\n";
-        $mensaje .= "CODIGO: " .$codigo  . "\n";
+        $mensaje .= "CODIGO: " . $codigo  . "\n";
         $mensaje .= "DESTINO: " . $destino . "\n";
-        $mensaje .= "RESPONSABLE: " .$responsable. "\n";
-        $mensaje .= "VALOR PASAJE $: " .$costoPasaje  . "\n";
-        $mensaje .= "ABONADO $: " .$abonado. "\n";
+        $mensaje .= "RESPONSABLE: " . $responsable . "\n";
+        $mensaje .= "VALOR PASAJE $: " . $costoPasaje  . "\n";
+        $mensaje .= "ABONADO $: " . $abonado . "\n";
         $mensaje .= "PASAJEROS CANT. MAX: " . $maxPasajeros  . "\n";
-        $mensaje .= "PASAJEROS REGISTRADOS: " .$totalPasajeros  . "\n";
+        $mensaje .= "PASAJEROS REGISTRADOS: " . $totalPasajeros  . "\n";
 
         $mensaje .= $this->verPasajerosRegistrados();
 
         $mensaje .= "\n";
-      
+
         return $mensaje;
     }
 }

@@ -5,8 +5,8 @@ class PasajeroVIP extends Pasajero{
     private $nroViajeroFrecuente;
     private $cantidadMilla;
 
-    public function __construct($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla){
-        parent::__construct($nombre, $apellido, $nroDni, $nroTel, $nroTicket, $nroAsiento);
+    public function __construct($nombre, $apellido, $nroDni, $nroTel, $nroAsiento, $nroViajeroFrecuente, $cantidadMilla){
+        parent::__construct($nombre, $apellido, $nroDni, $nroTel,$nroAsiento);
         $this->nroViajeroFrecuente=$nroViajeroFrecuente;
         $this->cantidadMilla=$cantidadMilla;
     }
@@ -28,7 +28,7 @@ class PasajeroVIP extends Pasajero{
        $this->cantidadMilla=$cantidadMilla;
     }
     /////////////// Fin de metodos de Acceso
-}
+
     //////////////////////////
     /*
         Implementar el método darPorcentajeIncremento() que retorne el porcentaje que debe aplicarse como incremento según las características del pasajero. 
@@ -49,27 +49,20 @@ class PasajeroVIP extends Pasajero{
             }
             return $incremento;
         }
-      function pasajeroRegistro(){
-            $nombre=$this->getNombre();
-            $apellido=$this->getApellido();
-            $dni=$this->getNroDni();
-            $tel=$this->getNroTel();
-            $ticket=$this->getNroTicket();
-            $nroViajeroFre=$this->getNroViajeroFrecuente();
-            $cantidadMilla=$this->getCanMaxPasajeros();
 
-      
-            $pasajero=$nombre . " " . $apellido . " | DNI: " . $dni . " | Tel: " . $tel . " | NRO Ticked: ".$ticket." | Asiento: ".$asiento." | Requiere silla?: ".($silla(true)? 'SI':'NO')." | Requiere Asitencia?: ".($asistente(true)? 'SI':'NO')." | Comida Especial?: ".($comidaEsp(true)? 'SI':'NO')."\n";
-    
-            return $pasajero;
-        }
 
     ///////////////////
     function __toString()
     {
-        $pasajero=$this->pasajeroRegistro();
-        return $pasajero;
+        $nroViajeroFre=$this->getNroViajeroFrecuente();
+        $cantidadMilla=$this->getCantidadMilla();
+      
+
+  
+        $pasajero=" | Viajero Frecuente NRO: " .$nroViajeroFre. " |Millas acumuladas: ".$cantidadMilla."\n";
+
+        return parent::__toString().$pasajero;
     }
 
-
+}
 ?>
